@@ -1,0 +1,15 @@
+{
+    "name": "L293D",
+    "keywords": "L293D, esp32, arduino, motor, controller, AC motor",
+    "description": "Control a motor with a L293D",
+    "repository":
+    {
+      "type": "git",
+      "url": "https://github.com/bjoernboeckle/HC_SR04.git"
+    },
+    "license": "MIT",
+    "version": "1.0.0",
+    "frameworks": "*",
+    "platforms": "*"
+  }
+  
