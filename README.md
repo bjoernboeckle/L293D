@@ -2,7 +2,7 @@
 
 This repository contains a library to control a motror connected to an H-Bridge (i.e. L293D), that can be used with Arduino and ESP32. 
 
-The ESP32 version can also configure the PWM frequency and resolution (only 8 supported at the moment).
+The ESP32 version can also configure the PWM frequency and resolution.
 Also the ESP32 version requires a channel for the PWM pin.
 
 # Quick start
@@ -15,10 +15,12 @@ Also the ESP32 version requires a channel for the PWM pin.
 #include <L293D.h>
 
 //Pin 1, 2, 3 and PWM channel 0
+//          A  B En, channel
 L293D motor(1, 2, 3, 0);
 
 void setup() {  
     motor.begin();     
+    // Speed -100%...0..100%
     motor.SetMotorSpeed(100);
 }
 
@@ -35,10 +37,12 @@ void loop() {
 #include <L293D.h>
 
 //Pin 1, 2, 3
+//          A  B  En
 L293D motor(1, 2, 3);
 
 void setup() {  
-    motor.begin();     
+    motor.begin();
+    // Speed -100%...0..100%
     motor.SetMotorSpeed(100);
 }
 

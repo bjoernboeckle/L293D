@@ -5,10 +5,10 @@
     "repository":
     {
       "type": "git",
-      "url": "https://github.com/bjoernboeckle/L293.git"
+      "url": "https://github.com/bjoernboeckle/L293D.git"
     },
     "license": "MIT",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "frameworks": "*",
     "platforms": "*"
   }

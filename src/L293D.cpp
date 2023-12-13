@@ -2,9 +2,9 @@
 #include "L293D.h"
 
 #ifdef ESP32
-L293D::L293D(int MotorA, int MotorB, int enablePin, int pwmChannel)
+  L293D::L293D(int MotorA, int MotorB, int enablePin, int pwmChannel)
 #else
-L293D::L293D(int MotorA, int MotorB, int enablePin)
+  L293D::L293D(int MotorA, int MotorB, int enablePin)
 #endif
 {
   _MotorA = MotorA;
@@ -13,18 +13,21 @@ L293D::L293D(int MotorA, int MotorB, int enablePin)
   _initialized = false;
   _currentSpeed = 0;
   _usePwm = false;
+  _resolutionFactor = 255;
 
 #ifdef ESP32
   _frequency = 1000;
   _resolution = 8;
   _pwmChannel = pwmChannel;
+  _resolutionFactor = (1<<_resolution) - 1;
 #endif
+
 }
 
 #ifdef ESP32
-bool L293D::begin(bool usePwm, int frequency, int resolution)
+  bool L293D::begin(bool usePwm, int frequency, int resolution)
 #else
-bool L293D::begin(bool usePwm)
+  bool L293D::begin(bool usePwm)
 #endif
 {
   if ((_MotorA == INVALID_PIN && _MotorB == INVALID_PIN) || (usePwm && _enablePin == INVALID_PIN))
@@ -57,6 +60,7 @@ bool L293D::SetupPwm(int frequency, int resolution)
 
   _frequency = frequency;
   _resolution = resolution;
+  _resolutionFactor = (1<<_resolution) - 1;  
 
   if (_initialized)
     ledcDetachPin(_enablePin);
@@ -104,10 +108,18 @@ bool L293D::SetMotorSpeed(int speed)
 
   if (_usePwm)
   {
-    // scale 0..100% to 0..255 PWM
-    int internalSpeed = speed * 255 / 100;
+    // scale 0..100% to 0..resolution PWM i.e 8 Bit ==>  255 PWM
+    int factor = (1<<_resolutionFactor);
+    int internalSpeed = speed * factor / 100;
+    
+    // incase 0, stop motor, use LOW for both Motor_A and Motor_B and High for Enable --> Fast motor stop
+    //EN  1A  2A  FUNCTION(1)
+    //H    L   L  Fast motor stop
+    //H    H   H  Fast motor stop
+    //L    X   X  Free-running motor stop    
     if (speed == 0)
       internalSpeed = 255;
+
 #ifdef ESP32
     ledcWrite(_pwmChannel, internalSpeed >= 0 ? internalSpeed : -internalSpeed);
 #else
