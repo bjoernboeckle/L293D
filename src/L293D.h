@@ -20,7 +20,7 @@ public:
 
     bool FreeRun();
     bool Stop() { return SetMotorSpeed(0); }
-    bool SetMotorSpeed(int speed);
+    bool SetMotorSpeed(double speedPercent);
     
 private:
 
@@ -32,7 +32,7 @@ private:
     #endif
 
     int _resolutionFactor;
-    int _currentSpeed;
+    double _currentSpeed;
     bool _usePwm;
     int _enablePin;
     int _MotorA;

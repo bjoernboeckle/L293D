@@ -96,29 +96,28 @@ bool L293D::FreeRun()
   return true;
 }
 
-bool L293D::SetMotorSpeed(int speed)
+bool L293D::SetMotorSpeed(double speedPercent)
 {
   if (!_initialized)
     return false;
 
   if (_MotorA != INVALID_PIN)
-    digitalWrite(_MotorA, speed > 0 ? HIGH : LOW);
+    digitalWrite(_MotorA, speedPercent > 0 ? HIGH : LOW);
   if (_MotorB != INVALID_PIN)
-    digitalWrite(_MotorB, speed < 0 ? HIGH : LOW);
+    digitalWrite(_MotorB, speedPercent < 0 ? HIGH : LOW);
 
   if (_usePwm)
   {
     // scale 0..100% to 0..resolution PWM i.e 8 Bit ==>  255 PWM
-    int factor = (1<<_resolutionFactor);
-    int internalSpeed = speed * factor / 100;
+    double internalSpeed = speedPercent * _resolutionFactor / 100.0;
     
-    // incase 0, stop motor, use LOW for both Motor_A and Motor_B and High for Enable --> Fast motor stop
+    // in case 0, stop motor, use LOW for both Motor_A and Motor_B and High for Enable --> Fast motor stop
     //EN  1A  2A  FUNCTION(1)
     //H    L   L  Fast motor stop
     //H    H   H  Fast motor stop
     //L    X   X  Free-running motor stop    
-    if (speed == 0)
-      internalSpeed = 255;
+    if (speedPercent == 0)
+      internalSpeed = _resolutionFactor; // max PWM --> HIGH for fast motor stop
 
 #ifdef ESP32
     ledcWrite(_pwmChannel, internalSpeed >= 0 ? internalSpeed : -internalSpeed);
@@ -131,7 +130,7 @@ bool L293D::SetMotorSpeed(int speed)
     digitalWrite(_enablePin, HIGH);
   }
 
-  _currentSpeed = speed;
+  _currentSpeed = speedPercent;
 
   return true;
 }

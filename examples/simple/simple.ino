@@ -1,12 +1,16 @@
 #include <Arduino.h>
 #include <L293D.h>
 
-//Pin 1, 2, 3 and PWM channel 0
-//          A  B En, channel
-L293D motor(1, 2, 3);
+#define MOTOR_A      1   // motor pin a
+#define MOTOR_B      2   // motor pin b
+#define MOTOR_ENABLE 3   // Enable (also PWM pin)
+
+// Create motor object using given pins
+L293D motor(MOTOR_A, MOTOR_B, MOTOR_ENABLE);
 
 void setup() {  
-    motor.begin();
+    // begin --> true false, enables disables PWM
+    motor.begin(true);
     // Speed -100%...0..100%
     motor.SetMotorSpeed(100);
 }
