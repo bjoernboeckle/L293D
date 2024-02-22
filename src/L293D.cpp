@@ -14,6 +14,7 @@
   _currentSpeed = 0;
   _usePwm = false;
   _resolutionFactor = 255;
+  _stopPWMValue = 100;
 
 #ifdef ESP32
   _frequency = 1000;
@@ -108,16 +109,24 @@ bool L293D::SetMotorSpeed(double speedPercent)
 
   if (_usePwm)
   {
-    // scale 0..100% to 0..resolution PWM i.e 8 Bit ==>  255 PWM
-    double internalSpeed = speedPercent * _resolutionFactor / 100.0;
+    double internalSpeed;
     
-    // in case 0, stop motor, use LOW for both Motor_A and Motor_B and High for Enable --> Fast motor stop
+    // in case 0, stop motor, use LOW for both Motor_A and Motor_B and High for Enable --> Fast motor stop (can be changed by SetStopPWMValue)
     //EN  1A  2A  FUNCTION(1)
     //H    L   L  Fast motor stop
     //H    H   H  Fast motor stop
     //L    X   X  Free-running motor stop    
     if (speedPercent == 0)
-      internalSpeed = _resolutionFactor; // max PWM --> HIGH for fast motor stop
+    {
+      // deafult max PWM --> HIGH for fast motor stop, or use changed _stopPWMValue
+      internalSpeed = _stopPWMValue * _resolutionFactor / 100.0; 
+    }
+    else
+    {
+      // scale 0..100% to 0..resolution PWM i.e 8 Bit ==>  max 255 PWM
+      internalSpeed = speedPercent * _resolutionFactor / 100.0;
+    }
+
 
 #ifdef ESP32
     ledcWrite(_pwmChannel, internalSpeed >= 0 ? internalSpeed : -internalSpeed);

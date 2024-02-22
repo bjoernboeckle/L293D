@@ -1,9 +1,15 @@
 # L293D
 
-This repository contains a library to control a motror connected to an H-Bridge (i.e. L293D), that can be used with Arduino and ESP32. 
+This repository contains a library to control a motor connected to an H-Bridge (i.e. L293D), that can be used with Arduino and ESP32. 
 
 The ESP32 version can also configure the PWM frequency and resolution.
-Also the ESP32 version requires a channel for the PWM pin.
+The ESP32 version requires a channel for the PWM pin.
+
+To stop the motor a speed of zero can be used, by default the library sets the pwm output to 100% and disables the motor signals.
+
+If required, this can be changed by using the "SetStopPWMValue" function and setting the stop pwm to 0.
+
+
 
 # Quick start
 

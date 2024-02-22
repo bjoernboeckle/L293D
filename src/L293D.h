@@ -3,7 +3,8 @@
 
 #define INVALID_PIN     -1
 
-class L293D {
+class L293D 
+{
 
 public:    
     #ifdef ESP32
@@ -21,6 +22,10 @@ public:
     bool FreeRun();
     bool Stop() { return SetMotorSpeed(0); }
     bool SetMotorSpeed(double speedPercent);
+    double GetCurrentMotorSpeed() {return _currentSpeed;}
+
+    // set pwm output in percentage to stop motor (default 100%, fast motor stop, could be set to 0, to disable pwm output for stopping the motor)
+    void SetStopPWMValue(double pwm = 100) { _stopPWMValue = pwm; }
     
 private:
 
@@ -38,6 +43,8 @@ private:
     int _MotorA;
     int _MotorB;
     bool _initialized;
+
+    double _stopPWMValue;
 };
 
 
