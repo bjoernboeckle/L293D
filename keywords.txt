@@ -10,6 +10,8 @@ begin	KEYWORD2
 Stop	KEYWORD2
 SetMotorSpeed	KEYWORD2
 FreeRun	KEYWORD2
+GetCurrentMotorSpeed	KEYWORD2
+SetStopPWMValue	KEYWORD2
 
 ==================================
 CONSTANTS

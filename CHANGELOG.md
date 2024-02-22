@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.0.3](https://github.com/bjoernboeckle/L293D/tree/v1.0.3)
+- Added "GetCurrentMotorSpeed" function to read current set speed
+- Added "SetStopPWMValue" function to use a custom PWM value for a stopped motor
+
 
 ## [v1.0.2](https://github.com/bjoernboeckle/L293D/tree/v1.0.2)
 - Added example for ESP32
